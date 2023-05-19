@@ -53,6 +53,10 @@ void checkAlloTree(SingleSourceMovesTree* tr);
 SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNode* source, Board board, char row, char col); // if the player is T
 SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNode* source, Board board, char row, char col); // if the player is B
 SingleSourceMovesTreeNode* createSingleSourceMovesTreeNode(Board board, char row, char col,SingleSourceMovesTreeNode* next_move);
+bool thePosIsOutOfTheBoard(char row,char col);
+bool thePosIsOnTPlayer(Board board,char row,char col);
+bool thePosIsOnBPlayer(Board board, char row, char col);
+
 
 int main()
 {
@@ -72,7 +76,7 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src)
     if ((board[src->col][src->row] != T_PLAYER) && (board[src->col][src->row] != B_PLAYER))
         return NULL;
 
-    if ((board[src->col][src->row] == T_PLAYER))
+    if ((board[(src->col - 'A')][(src->row - '0')] == T_PLAYER))
     {
       tr->source = FindSingleSourceMovesHelperT(tr->source,board, src->row,src->col); //TODO
     }
@@ -87,13 +91,13 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNod
 {
     SingleSourceMovesTreeNode *left, * right;
 
-    if ((row > BOARD_SIZE) || (col > BOARD_SIZE) || (col < FIRST_COL))
+    if (thePosIsOutOfTheBoard(row,col) == true)
         return NULL;
 
-    else if (board[(row - 'A')][(col - '0') - 1] == T_PLAYER)
+    else if (thePosIsOnTPlayer(board,row,col) == true)
         return NULL;
 
-    else if (board[(row - 'A') + 1][(col - '0')] == B_PLAYER || board[(row - 'A')+ 1][(col - '0') - 1] == B_PLAYER)
+    else if ((thePosIsOnBPlayer(board,row +1 ,col - 1) == true) || (thePosIsOnBPlayer(board,row +1 ,col + 1) == true))
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         if(NEXT_LEFT_IS_OPEN_FROM_B(board,(row + 1),(col - 1)) == true)
@@ -110,6 +114,38 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNod
     return source;
 }
 
+bool thePosIsOutOfTheBoard(char row,char col)
+{
+    int mRow, mCol;
+    mRow = row - 'A';
+    mCol = (col - '0') - 1;
+    if((mRow > BOARD_SIZE) || (mCol > BOARD_SIZE) || (mCol < FIRST_COL))
+        return true;
+    else
+        return false;
+}
+
+bool thePosIsOnTPlayer(Board board,char row,char col)
+{
+    int mRow, mCol;
+    mRow = row - 'A';
+    mCol = (col - '0') - 1;
+    if (board[mRow][mCol] == T_PLAYER)
+        return true;
+    else
+        return false;
+}
+
+bool thePosIsOnBPlayer(Board board,char row,char col)
+{
+    int mRow, mCol;
+    mRow = row - 'A';
+    mCol = (col - '0') - 1;
+    if (board[mRow][mCol] == B_PLAYER)
+        return true;
+    else
+        return false;
+}
 
 
 SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNode* source, Board board, char row, char col)
