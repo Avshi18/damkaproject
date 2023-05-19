@@ -162,9 +162,9 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNod
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         if(NEXT_LEFT_IS_OPEN_FROM_T(board,(row - 1),(col - 1)) == true)
-            left = FindSingleSourceMovesHelperT(source->next_move[0], board, row + 2, col - 2);
+            left = FindSingleSourceMovesHelperT(source->next_move[0], board, row - 2, col - 2);
         if(NEXT_RIGHT_IS_OPEN_FROM_T(board,(row - 1),(col + 1)) == true)
-            right = FindSingleSourceMovesHelperT(source->next_move[1], board, row + 1, col + 1);
+            right = FindSingleSourceMovesHelperT(source->next_move[1], board, row - 2, col + 2);
     }
     else
     {
