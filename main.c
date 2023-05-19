@@ -116,17 +116,17 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src)
     return tr;
 }
 
-SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNode* source, Board board, char row, char col)
+SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNode* source, Board board, char row, char col) // T player
 {
     SingleSourceMovesTreeNode *left, * right;
 
-    if (thePosIsOutOfTheBoard(row,col) == true)
+    if (thePosIsOutOfTheBoard(row,col) == true) // checks if the postion of the player is on the board
         return NULL;
 
-    else if (thePosIsOnTPlayer(board,row,col) == true)
+    else if (thePosIsOnTPlayer(board,row,col) == true) // checks if the position of player T is on his friend
         return NULL;
 
-    else if ((thePosIsOnBPlayer(board,row +1 ,col - 1) == true) || (thePosIsOnBPlayer(board,row +1 ,col + 1) == true))
+    else if ((thePosIsOnBPlayer(board,row +1 ,col - 1) == true) || (thePosIsOnBPlayer(board,row +1 ,col + 1) == true)) // checks if the T player has player B in the next movment
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         if(NEXT_LEFT_IS_OPEN_FROM_B(board,(row + 1),(col - 1)) == true)
@@ -134,7 +134,7 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNod
         if(NEXT_RIGHT_IS_OPEN_FROM_B(board,(row + 1),(col + 1)) == true)
             right = FindSingleSourceMovesHelperT(source->next_move[1], board, row + 1, col + 2);
     }
-    else
+    else // if the next movment is open
     {
         source = createSingleSourceMovesTreeNode(board,row,col, NULL);
         left = FindSingleSourceMovesHelperT(source->next_move[0], board, row + 1, col - 1);
@@ -177,17 +177,17 @@ bool thePosIsOnBPlayer(Board board,char row,char col)
 }
 
 
-SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNode* source, Board board, char row, char col)
+SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNode* source, Board board, char row, char col) // B player
 {
     SingleSourceMovesTreeNode *left, * right;
 
-    if (thePosIsOutOfTheBoard(row,col) == true)
+    if (thePosIsOutOfTheBoard(row,col) == true) // checks if the postion of the player is on the board
         return NULL;
 
-    else if (thePosIsOnBPlayer(board,row,col) == true)
+    else if (thePosIsOnBPlayer(board,row,col) == true) // checks if the position of player B is on his friend
         return NULL;
 
-    else if((thePosIsOnTPlayer(board,row - 1,col + 1) == true) || (thePosIsOnTPlayer(board,row - 1,col + 1) == true))
+    else if((thePosIsOnTPlayer(board,row - 1,col + 1) == true) || (thePosIsOnTPlayer(board,row - 1,col + 1) == true)) // checks if the B player has player T in the next movment
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         if(NEXT_LEFT_IS_OPEN_FROM_T(board,(row - 1),(col - 1)) == true)
@@ -195,7 +195,7 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNod
         if(NEXT_RIGHT_IS_OPEN_FROM_T(board,(row - 1),(col + 1)) == true)
             right = FindSingleSourceMovesHelperT(source->next_move[1], board, row - 2, col + 2);
     }
-    else
+    else // if the next movment is open
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         left = FindSingleSourceMovesHelperB(source->next_move[0], board, row - 1, col - 1);
