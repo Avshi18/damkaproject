@@ -12,10 +12,10 @@
 #define RIGHT 1
 #define FIRST_COL 1
 #define INVALID_POS -1
-#define NEXT_LEFT_IS_OPEN_FROM_B(board, row, col) ((board[(row- '0') - 17][(col) - 2] != B_PLAYER) ? true : false)
-#define NEXT_RIGHT_IS_OPEN_FROM_B(board, row, col) ((board[(row - '0') - 17][(col) + 2] != B_PLAYER) ? true : false)
-#define NEXT_LEFT_IS_OPEN_FROM_T(board, row, col) ((board[(row- '0') - 17][(col) - 2] != T_PLAYER) ? true : false)
-#define NEXT_RIGHT_IS_OPEN_FROM_T(board, row, col) ((board[(row- '0') - 17][(col) - 2] != T_PLAYER) ? true : false)
+#define NEXT_LEFT_IS_OPEN_FROM_B(board, row, col) ((board[(row- 'A')][(col - '0') - 1] != B_PLAYER) ? true : false)
+#define NEXT_RIGHT_IS_OPEN_FROM_B(board, row, col) ((board[(row - 'A')][(col - '0')] != B_PLAYER) ? true : false)
+#define NEXT_LEFT_IS_OPEN_FROM_T(board, row, col) ((board[(row- 'A')][(col - '0') - 1] != T_PLAYER) ? true : false)
+#define NEXT_RIGHT_IS_OPEN_FROM_T(board, row, col) ((board[(row- 'A')][(col - '0')] != T_PLAYER) ? true : false)
 
 typedef struct _checkersPos
 {
@@ -152,12 +152,13 @@ SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNod
 {
     SingleSourceMovesTreeNode *left, * right;
 
-    if ((row > BOARD_SIZE) || (col > BOARD_SIZE) || (col < FIRST_COL))
+    if (thePosIsOutOfTheBoard(row,col) == true)
         return NULL;
 
-    else if (board[(row - 'A') - 1][(col - '0')] == B_PLAYER)
+    else if (thePosIsOnBPlayer(board,row,col) == true)
         return NULL;
-    else if(board[(row - 'A')][(col - '0')] == T_PLAYER || board[(row - 'A')][(col - '0') - 1] == T_PLAYER)
+
+    else if((thePosIsOnTPlayer(board,row - 1,col + 1) == true) || (thePosIsOnTPlayer(board,row - 1,col + 1) == true))
     {
         source = createSingleSourceMovesTreeNode(board, row,col,NULL);
         if(NEXT_LEFT_IS_OPEN_FROM_T(board,(row - 1),(col - 1)) == true)
