@@ -48,7 +48,7 @@ typedef struct _SingleSourceMovesTree
 }SingleSourceMovesTree;
 
 
-
+SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
 void checkAlloTree(SingleSourceMovesTree* tr);
 SingleSourceMovesTreeNode* FindSingleSourceMovesHelperT(SingleSourceMovesTreeNode* source, Board board, char row, char col); // if the player is T
 SingleSourceMovesTreeNode* FindSingleSourceMovesHelperB(SingleSourceMovesTreeNode* source, Board board, char row, char col); // if the player is B
@@ -56,14 +56,44 @@ SingleSourceMovesTreeNode* createSingleSourceMovesTreeNode(Board board, char row
 bool thePosIsOutOfTheBoard(char row,char col);
 bool thePosIsOnTPlayer(Board board,char row,char col);
 bool thePosIsOnBPlayer(Board board, char row, char col);
-
-
+void printfWaysOfMovments(SingleSourceMovesTree* tr);
+void printfWaysOfMovmentsHelper(SingleSourceMovesTreeNode* source);
 int main()
 {
+    Player T;
+    Player B;
+    SingleSourceMovesTree* tr;
+    Board board;
+    board[0][1] = T;
+//    board[0][3] = T;
+//    board[0][5] = T;
+//    board[0][7] = T;
+//    board[7][1] = B;
+//    board[7][3] = B;
+//    board[7][5] = B;
+//    board[7][7] = B;
+
+    tr = FindSingleSourceMoves(board, &board[0][1]); // the parameters that we send here is not good
+    printfWaysOfMovments(tr);
    return 0;
 }
 
+void printfWaysOfMovments(SingleSourceMovesTree* tr)
+{
+    printfWaysOfMovmentsHelper(tr->source);
+}
 
+void printfWaysOfMovmentsHelper(SingleSourceMovesTreeNode* source)
+{
+    if (source == NULL)
+    {
+        printf("\n");
+        return;
+    }
+    printf("%c%c_", source->pos->row, source->pos->col);
+    printfWaysOfMovmentsHelper(source->next_move[0]);
+    printfWaysOfMovmentsHelper(source->next_move[1]);
+}
 
 
 
@@ -72,15 +102,14 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src)
     SingleSourceMovesTree* tr = (SingleSourceMovesTree*)malloc(sizeof(SingleSourceMovesTree));
     checkAlloTree(tr);
 
-
-    if ((board[src->col][src->row] != T_PLAYER) && (board[src->col][src->row] != B_PLAYER))
+    if ((board[src->row][src->col] != T_PLAYER) && (board[src->row][src->col] != B_PLAYER)) // if the player on the board doesnt exist
         return NULL;
 
-    if ((board[(src->col - 'A')][(src->row - '0')] == T_PLAYER))
+    if (thePosIsOnTPlayer(board,src->row,src->col) == true)
     {
-      tr->source = FindSingleSourceMovesHelperT(tr->source,board, src->row,src->col); //TODO
+       tr->source = FindSingleSourceMovesHelperT(tr->source,board, src->row,src->col); // if the player is T
     }
-    else
+    else // if the the player is B
     {
         tr->source = FindSingleSourceMovesHelperB(tr->source,board, src->row,src->col);
     }
