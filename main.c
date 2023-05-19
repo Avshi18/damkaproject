@@ -213,7 +213,6 @@ SingleSourceMovesTreeNode* createSingleSourceMovesTreeNode(Board board, char row
     if (res == NULL)
         exit(1);
     memcpy(res->board, board, (strlen(board) + 1));
-    //res->board = board;
     res->pos->row = row;
     res->pos->col = col;
     res->next_move[0] = next_move;
