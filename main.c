@@ -83,7 +83,7 @@ void printfWaysOfMovments(SingleSourceMovesTree* tr)
     printfWaysOfMovmentsHelper(tr->source);
 }
 
-void printfWaysOfMovmentsHelper(SingleSourceMovesTreeNode* source)
+void printfWaysOfMovmentsHelper(SingleSourceMovesTreeNode* source) // DLR print
 {
     if (source == NULL)
     {
